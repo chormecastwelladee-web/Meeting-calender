@@ -391,7 +391,16 @@
         <span>ปัดซ้าย/ขวาภายในปฏิทินเพื่อเปลี่ยนเดือน · แตะกิจกรรมเพื่อดูรายละเอียด</span>
       </div>
 
-      
+      <details class="howto">
+        <summary>วิธีหา Calendar ID จาก Google Calendar</summary>
+        <ol>
+          <li>เปิด <code>calendar.google.com</code> บนคอมพิวเตอร์</li>
+          <li>เลือกปฏิทินในเมนูซ้าย แล้วกดจุดสามจุด → <code>การตั้งค่าและการแชร์</code></li>
+          <li>เลื่อนไปที่หัวข้อ <code>สิทธิ์การเข้าถึงสำหรับกิจกรรมสาธารณะ</code> แล้วติ๊ก <code>ทำให้ปฏิทินนี้เผยแพร่ต่อสาธารณะ</code></li>
+          <li>เลื่อนลงไปที่หัวข้อ <code>รวมปฏิทิน</code> จะเห็น <code>Calendar ID</code> (มักจะเป็นอีเมลของคุณ หรือรหัสลงท้ายด้วย <code>@group.calendar.google.com</code>)</li>
+          <li>คัดลอก Calendar ID มาวางในช่องตั้งค่าของหน้านี้ได้เลย</li>
+        </ol>
+      </details>
     </div>
   </div>
 
@@ -418,6 +427,7 @@
   const ENG_MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
   const STORAGE_KEY = "gcal_view_calendar_id";
+  const DEFAULT_CALENDAR_ID = "fo.welladee@gmail.com";
 
   const els = {
     heroDay: document.getElementById('heroDay'),
@@ -488,7 +498,7 @@
   }
 
   function openModal() {
-    const saved = localStorage.getItem(STORAGE_KEY) || "";
+    const saved = localStorage.getItem(STORAGE_KEY) || DEFAULT_CALENDAR_ID;
     els.calIdInput.value = saved;
     els.overlay.classList.add('open');
     setTimeout(() => els.calIdInput.focus(), 50);
@@ -518,8 +528,8 @@
   window.addEventListener('resize', fitScale);
 
   renderHero();
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) { showCalendar(saved); } else { showEmpty(); }
+  const saved = localStorage.getItem(STORAGE_KEY) || DEFAULT_CALENDAR_ID;
+  showCalendar(saved);
 </script>
 
 </body>
