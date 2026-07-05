@@ -369,83 +369,38 @@
             <span class="eng" id="heroMonthEn"></span>
           </div>
         </div>
-        <button class="gear-btn" id="openSettings" title="ตั้งค่าปฏิทิน" aria-label="ตั้งค่าปฏิทิน">⚙</button>
       </div>
 
       <div class="cal-wrap" id="calWrap">
-        <div class="empty-state" id="emptyState">
-          <div class="pin">★</div>
-          <h3>ยังไม่ได้เชื่อมปฏิทิน</h3>
-          <p>ใส่อีเมล หรือ Calendar ID ของ Google Calendar<br>ที่ตั้งค่าแชร์แบบสาธารณะไว้แล้ว เพื่อแสดงผลที่นี่</p>
-          <button id="emptyStateBtn">เชื่อมปฏิทินตอนนี้</button>
-        </div>
-        <div class="cal-scale-outer" id="calScaleOuter" style="display:none;">
+        <div class="cal-scale-outer" id="calScaleOuter">
           <div class="cal-scale-inner" id="calScaleInner">
             <iframe id="gcal" width="800" height="600" frameborder="0" scrolling="no"></iframe>
           </div>
         </div>
       </div>
 
-      <div class="note-strip" id="noteStrip" style="display:none;">
+      <div class="note-strip" id="noteStrip">
         <span class="dot"></span>
         <span>ปัดซ้าย/ขวาภายในปฏิทินเพื่อเปลี่ยนเดือน · แตะกิจกรรมเพื่อดูรายละเอียด</span>
       </div>
-
-      <details class="howto">
-        <summary>วิธีหา Calendar ID จาก Google Calendar</summary>
-        <ol>
-          <li>เปิด <code>calendar.google.com</code> บนคอมพิวเตอร์</li>
-          <li>เลือกปฏิทินในเมนูซ้าย แล้วกดจุดสามจุด → <code>การตั้งค่าและการแชร์</code></li>
-          <li>เลื่อนไปที่หัวข้อ <code>สิทธิ์การเข้าถึงสำหรับกิจกรรมสาธารณะ</code> แล้วติ๊ก <code>ทำให้ปฏิทินนี้เผยแพร่ต่อสาธารณะ</code></li>
-          <li>เลื่อนลงไปที่หัวข้อ <code>รวมปฏิทิน</code> จะเห็น <code>Calendar ID</code> (มักจะเป็นอีเมลของคุณ หรือรหัสลงท้ายด้วย <code>@group.calendar.google.com</code>)</li>
-          <li>คัดลอก Calendar ID มาวางในช่องตั้งค่าของหน้านี้ได้เลย</li>
-        </ol>
-      </details>
     </div>
   </div>
-
-  <div class="overlay" id="overlay">
-    <div class="modal">
-      <h2>ตั้งค่าปฏิทิน</h2>
-      <p class="sub">ใส่ Calendar ID ของปฏิทิน Google ที่แชร์แบบสาธารณะไว้แล้ว ระบบจะจำค่านี้ไว้ในเบราว์เซอร์นี้</p>
-      <div class="field-row">
-        <label for="calIdInput">Calendar ID หรืออีเมล Google</label>
-        <input type="text" id="calIdInput" placeholder="เช่น somchai@gmail.com">
-      </div>
-      <div class="modal-actions">
-        <button class="btn-cancel" id="cancelBtn">ยกเลิก</button>
-        <button class="btn-save" id="saveBtn">บันทึกและแสดงผล</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
 
 <script>
   const THAI_MONTHS = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
   const THAI_WEEKDAYS = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"];
   const ENG_MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-  const STORAGE_KEY = "gcal_view_calendar_id";
-  const DEFAULT_CALENDAR_ID = "fo.welladee@gmail.com";
+  const CALENDAR_ID = "fo.welladee@gmail.com";
 
   const els = {
     heroDay: document.getElementById('heroDay'),
     heroWeekday: document.getElementById('heroWeekday'),
     heroMonthTh: document.getElementById('heroMonthTh'),
     heroMonthEn: document.getElementById('heroMonthEn'),
-    emptyState: document.getElementById('emptyState'),
-    emptyStateBtn: document.getElementById('emptyStateBtn'),
     calScaleOuter: document.getElementById('calScaleOuter'),
     calScaleInner: document.getElementById('calScaleInner'),
-    noteStrip: document.getElementById('noteStrip'),
     gcal: document.getElementById('gcal'),
-    overlay: document.getElementById('overlay'),
-    openSettings: document.getElementById('openSettings'),
-    cancelBtn: document.getElementById('cancelBtn'),
-    saveBtn: document.getElementById('saveBtn'),
-    calIdInput: document.getElementById('calIdInput'),
-    toast: document.getElementById('toast'),
   };
 
   function renderHero() {
@@ -483,53 +438,15 @@
     outer.style.height = `${BASE_H * scale}px`;
   }
 
-  function showCalendar(calId) {
-    els.gcal.src = buildEmbedUrl(calId);
-    els.emptyState.style.display = "none";
-    els.calScaleOuter.style.display = "block";
-    els.noteStrip.style.display = "flex";
+  function showCalendar() {
+    els.gcal.src = buildEmbedUrl(CALENDAR_ID);
     requestAnimationFrame(fitScale);
   }
-
-  function showEmpty() {
-    els.emptyState.style.display = "block";
-    els.calScaleOuter.style.display = "none";
-    els.noteStrip.style.display = "none";
-  }
-
-  function openModal() {
-    const saved = localStorage.getItem(STORAGE_KEY) || DEFAULT_CALENDAR_ID;
-    els.calIdInput.value = saved;
-    els.overlay.classList.add('open');
-    setTimeout(() => els.calIdInput.focus(), 50);
-  }
-  function closeModal() { els.overlay.classList.remove('open'); }
-
-  function showToast(msg) {
-    els.toast.textContent = msg;
-    els.toast.classList.add('show');
-    setTimeout(() => els.toast.classList.remove('show'), 2200);
-  }
-
-  els.openSettings.addEventListener('click', openModal);
-  els.emptyStateBtn.addEventListener('click', openModal);
-  els.cancelBtn.addEventListener('click', closeModal);
-  els.overlay.addEventListener('click', (e) => { if (e.target === els.overlay) closeModal(); });
-
-  els.saveBtn.addEventListener('click', () => {
-    const val = els.calIdInput.value.trim();
-    if (!val) { showToast("กรุณาใส่ Calendar ID ก่อนบันทึก"); return; }
-    localStorage.setItem(STORAGE_KEY, val);
-    showCalendar(val);
-    closeModal();
-    showToast("เชื่อมปฏิทินเรียบร้อย");
-  });
 
   window.addEventListener('resize', fitScale);
 
   renderHero();
-  const saved = localStorage.getItem(STORAGE_KEY) || DEFAULT_CALENDAR_ID;
-  showCalendar(saved);
+  showCalendar();
 </script>
 
 </body>
