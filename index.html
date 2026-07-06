@@ -134,33 +134,52 @@
     margin-top: 2px;
   }
 
-  .gear-btn {
+  .zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .zoom-btn {
     border: 1.5px solid var(--ink);
     background: transparent;
     color: var(--ink);
     border-radius: 999px;
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    width: 36px;
+    height: 36px;
+    font-size: 17px;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
     cursor: pointer;
     flex-shrink: 0;
     transition: background .15s, color .15s, transform .15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
   }
-  .gear-btn:hover { background: var(--ink); color: var(--paper); }
-  .gear-btn:active { transform: scale(0.92); }
+  .zoom-btn:hover { background: var(--ink); color: var(--paper); }
+  .zoom-btn:active { transform: scale(0.92); }
+  .zoom-pct {
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 38px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
 
   /* ---------- Calendar embed area ---------- */
   .cal-wrap {
     border-radius: 12px;
-    overflow: hidden;
+    overflow: auto;
     border: 1px solid var(--line);
     background: #fff;
     position: relative;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
   }
   .cal-scale-outer {
-    width: 100%;
-    overflow: hidden;
     position: relative;
+    overflow: visible;
   }
   .cal-scale-inner {
     transform-origin: top left;
@@ -168,6 +187,7 @@
   iframe#gcal {
     display: block;
     border: 0;
+    pointer-events: auto;
   }
 
   .empty-state {
@@ -219,134 +239,6 @@
   }
   .note-strip .dot { width:6px; height:6px; border-radius:50%; background: var(--pine-soft); flex-shrink:0; }
 
-  details.howto {
-    margin-top: 18px;
-    border-top: 2px dashed var(--line);
-    padding-top: 16px;
-  }
-  details.howto summary {
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14.5px;
-    color: var(--pine);
-    list-style: none;
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  details.howto summary::-webkit-details-marker{ display:none; }
-  details.howto summary::before {
-    content: "▸";
-    transition: transform .15s;
-  }
-  details.howto[open] summary::before { transform: rotate(90deg); }
-  .howto ol {
-    margin: 14px 0 4px;
-    padding-left: 20px;
-    font-size: 13.5px;
-    line-height: 1.9;
-    color: var(--ink-soft);
-  }
-  .howto code {
-    background: var(--paper-dark);
-    padding: 2px 6px;
-    border-radius: 5px;
-    font-size: 12.5px;
-  }
-
-  /* ---------- Modal ---------- */
-  .overlay {
-    position: fixed; inset: 0;
-    background: rgba(35,35,32,0.55);
-    display: none;
-    align-items: flex-end;
-    justify-content: center;
-    z-index: 50;
-    padding: 0;
-  }
-  .overlay.open { display: flex; }
-  @media (min-width: 640px) {
-    .overlay { align-items: center; }
-  }
-
-  .modal {
-    background: var(--paper);
-    width: 100%;
-    max-width: 480px;
-    border-radius: 20px 20px 0 0;
-    padding: 24px 22px 28px;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
-  }
-  @media (min-width: 640px) {
-    .modal { border-radius: 18px; }
-  }
-
-  .modal h2 {
-    font-family: 'IBM Plex Sans Thai', sans-serif;
-    font-size: 18px;
-    margin: 0 0 6px;
-  }
-  .modal p.sub {
-    font-size: 13px;
-    color: var(--muted);
-    margin: 0 0 18px;
-    line-height: 1.7;
-  }
-  .modal label {
-    display:block;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-  .modal input[type=text] {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: 1.5px solid var(--line);
-    font-size: 14px;
-    font-family: 'IBM Plex Sans Thai', sans-serif;
-    background: #fff;
-    color: var(--ink);
-  }
-  .modal input[type=text]:focus {
-    outline: none;
-    border-color: var(--pine);
-  }
-  .field-row { margin-bottom: 16px; }
-  .modal-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 4px;
-  }
-  .modal-actions button {
-    flex: 1;
-    padding: 12px;
-    border-radius: 10px;
-    border: 0;
-    font-family: 'IBM Plex Sans Thai', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .btn-save { background: var(--pine); color: #fff; }
-  .btn-cancel { background: transparent; color: var(--ink-soft); border: 1.5px solid var(--line) !important; }
-  .btn-save:active, .btn-cancel:active { transform: scale(0.98); }
-
-  .toast {
-    position: fixed;
-    bottom: 20px; left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--ink);
-    color: var(--paper);
-    padding: 12px 20px;
-    border-radius: 999px;
-    font-size: 13.5px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .25s, transform .25s;
-    z-index: 60;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -369,6 +261,12 @@
             <span class="eng" id="heroMonthEn"></span>
           </div>
         </div>
+
+        <div class="zoom-controls">
+          <button class="zoom-btn" id="zoomOut" aria-label="ซูมออก">−</button>
+          <span class="zoom-pct" id="zoomPct">100%</span>
+          <button class="zoom-btn" id="zoomIn" aria-label="ซูมเข้า">+</button>
+        </div>
       </div>
 
       <div class="cal-wrap" id="calWrap">
@@ -381,7 +279,7 @@
 
       <div class="note-strip" id="noteStrip">
         <span class="dot"></span>
-        <span>ปัดซ้าย/ขวาภายในปฏิทินเพื่อเปลี่ยนเดือน · แตะกิจกรรมเพื่อดูรายละเอียด</span>
+        <span>ใช้ปุ่ม + / − เพื่อซูมปฏิทิน แล้วเลื่อนนิ้วภายในกรอบเพื่อดูส่วนอื่น</span>
       </div>
     </div>
   </div>
@@ -398,9 +296,13 @@
     heroWeekday: document.getElementById('heroWeekday'),
     heroMonthTh: document.getElementById('heroMonthTh'),
     heroMonthEn: document.getElementById('heroMonthEn'),
+    calWrap: document.getElementById('calWrap'),
     calScaleOuter: document.getElementById('calScaleOuter'),
     calScaleInner: document.getElementById('calScaleInner'),
     gcal: document.getElementById('gcal'),
+    zoomIn: document.getElementById('zoomIn'),
+    zoomOut: document.getElementById('zoomOut'),
+    zoomPct: document.getElementById('zoomPct'),
   };
 
   function renderHero() {
@@ -429,21 +331,69 @@
   const BASE_W = 800;
   const BASE_H = 600;
 
-  function fitScale() {
-    const outer = els.calScaleOuter;
-    if (outer.style.display === "none") return;
-    const containerWidth = outer.parentElement.clientWidth;
-    const scale = containerWidth / BASE_W;
-    els.calScaleInner.style.transform = `scale(${scale})`;
-    outer.style.height = `${BASE_H * scale}px`;
+  // zoomFactor is a multiplier applied on top of the "fit width" base scale.
+  // 1.0 = fits the container width exactly (previous default behavior).
+  const ZOOM_MIN = 0.6;
+  const ZOOM_MAX = 2.5;
+  const ZOOM_STEP = 0.15;
+  let zoomFactor = 1.0;
+  let baseFitScale = 1.0;
+
+  function computeBaseFitScale() {
+    const containerWidth = els.calWrap.clientWidth;
+    return containerWidth / BASE_W;
   }
+
+  function applyScale() {
+    const scale = baseFitScale * zoomFactor;
+    els.calScaleInner.style.transform = `scale(${scale})`;
+    els.calScaleOuter.style.width = `${BASE_W * scale}px`;
+    els.calScaleOuter.style.height = `${BASE_H * scale}px`;
+    els.zoomPct.textContent = `${Math.round(zoomFactor * 100)}%`;
+    els.zoomIn.disabled = zoomFactor >= ZOOM_MAX - 0.001;
+    els.zoomOut.disabled = zoomFactor <= ZOOM_MIN + 0.001;
+  }
+
+  function fitScale() {
+    baseFitScale = computeBaseFitScale();
+    applyScale();
+  }
+
+  function setZoom(newZoom) {
+    zoomFactor = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, newZoom));
+    applyScale();
+  }
+
+  els.zoomIn.addEventListener('click', () => setZoom(zoomFactor + ZOOM_STEP));
+  els.zoomOut.addEventListener('click', () => setZoom(zoomFactor - ZOOM_STEP));
+
+  // Ctrl/Cmd + wheel zoom for desktop trackpads (pinch on trackpad fires wheel with ctrlKey)
+  els.calWrap.addEventListener('wheel', (e) => {
+    if (!e.ctrlKey) return;
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
+    setZoom(zoomFactor + delta);
+  }, { passive: false });
+
+  // Double-tap / double-click to toggle between fit (1.0) and a closer zoom (1.6)
+  let lastTap = 0;
+  els.calWrap.addEventListener('dblclick', () => {
+    setZoom(zoomFactor > 1.2 ? 1.0 : 1.6);
+  });
+  els.calWrap.addEventListener('touchend', (e) => {
+    const now = Date.now();
+    if (now - lastTap < 300) {
+      setZoom(zoomFactor > 1.2 ? 1.0 : 1.6);
+    }
+    lastTap = now;
+  });
+
+  window.addEventListener('resize', fitScale);
 
   function showCalendar() {
     els.gcal.src = buildEmbedUrl(CALENDAR_ID);
     requestAnimationFrame(fitScale);
   }
-
-  window.addEventListener('resize', fitScale);
 
   renderHero();
   showCalendar();
